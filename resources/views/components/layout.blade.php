@@ -33,17 +33,37 @@
                 ><img class="w-24" src="{{asset('images/logo.png')}}" alt="logo" class="logo"
             /></a>
             <ul class="flex space-x-6 mr-6 text-lg">
+                @auth
                 <li>
-                    <a href="register.html" class="hover:text-laravel"
+                    <b>
+                    Welcome {{auth()->user()->name}}
+                    </b>
+                </li>
+                <li>
+                    <a href="listings/manage" class="hover:text-laravel"
+                        ><i class="fa-solid fa-gear"></i>
+                        Manage Listings</a
+                    >
+                </li>
+                <li>
+                    <form class="inline" action="/logout" method="POST">
+                    @csrf
+                    <button class="hover:text-laravel" type="submit"><i class="fa-solid fa-door-closed"></i> Log out</button>
+                    </form>
+                </li>
+                @else
+                <li>
+                    <a href="/register/" class="hover:text-laravel"
                         ><i class="fa-solid fa-user-plus"></i> Register</a
                     >
                 </li>
                 <li>
-                    <a href="login.html" class="hover:text-laravel"
+                    <a href="/login/" class="hover:text-laravel"
                         ><i class="fa-solid fa-arrow-right-to-bracket"></i>
                         Login</a
                     >
                 </li>
+                @endauth
             </ul>
         </nav>
             {{$slot}}

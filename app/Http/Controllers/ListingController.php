@@ -6,12 +6,14 @@ use App\Models\Listing;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 
+use function Psy\debug;
+
 class ListingController extends Controller
 {
     public function index(){
         // request('tag')
         return view('listings.index',[
-            'listings' => Listing::latest()->filter(request(['tag','search']))->paginate(2)
+            'listings' => Listing::latest()->filter(request(['tag','search']))->paginate(6)
         ]);
     }
     public function show(Listing $listing){
@@ -32,7 +34,45 @@ class ListingController extends Controller
             'tags' => 'sometimes|nullable',
             'website' => 'sometimes|nullable',
         ]);
+        if($request->hasFile('logo')){
+            $formFields['logo'] = $request->file('logo')->store('logos','public');
+        }
+        $formFields['user_id'] = auth()->id();
         Listing::create($formFields);
         return redirect('/')->with('message','Listing created successfully!');
+    }
+    public function edit(Listing $listing){
+        return view('listings.edit',['listing'=>$listing]);
+    }
+    public function update(Request $request, Listing $listing){
+
+    if($listing->user_id != auth()->id()){
+        abort(403,'Unauthorized Access');
+    }
+
+        $formFields = $request->validate([
+            'title' => 'required',
+            'company' => 'required',
+            'location' => 'required',
+            'email' => ['required','email'],
+            'description' => 'required',
+            'tags' => 'sometimes|nullable',
+            'website' => 'sometimes|nullable',
+        ]);
+        if($request->hasFile('logo')){
+            $formFields['logo'] = $request->file('logo')->store('logos','public');
+        }
+        $listing->update($formFields);
+        return back()->with('message','Listing updated successfully!');
+    }
+    public function terminate(Listing $listing){
+        if($listing->user_id != auth()->id()){
+            abort(403,'Unauthorized Access');
+        }
+        $listing->delete();
+        return redirect('/')->with('message','Listing deleted successfully!');
+    }
+    public function manage(){
+        return view('listings.manage',['listings' => auth()->user()->listings()->get()]);
     }
 }

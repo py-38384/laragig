@@ -12,7 +12,10 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory(10)->create();
+        $user = User::factory()->create([
+            'name' => 'Piyal Hossein',
+            'email' => 'piyal1313@gamil.com',
+        ]);
         // DB::table('listings')->insert([
         //     'title' => 'Laravel Senior Developer', 
         //     'tags' => 'laravel, javascript',
@@ -23,6 +26,7 @@ class DatabaseSeeder extends Seeder
         //     'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam minima et illo reprehenderit quas possimus voluptas repudiandae cum expedita, eveniet aliquid, quam illum quaerat consequatur! Expedita ab consectetur tenetur delensiti?'
         // ]);
         Listing::create([
+            'user_id' => $user->id,
             'title' => 'Laravel Senior Developer', 
             'tags' => 'laravel, javascript',
             'company' => 'Acme Corp',
@@ -32,6 +36,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam minima et illo reprehenderit quas possimus voluptas repudiandae cum expedita, eveniet aliquid, quam illum quaerat consequatur! Expedita ab consectetur tenetur delensiti?'
         ]);
         Listing::create([
+            'user_id' => $user->id,
             'title' => 'Full-Stack Engineer',
             'tags' => 'laravel, backend ,api',
             'company' => 'Stark Industries',
@@ -41,6 +46,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam minima et illo reprehenderit quas possimus voluptas repudiandae cum expedita, eveniet aliquid, quam illum quaerat consequatur! Expedita ab consectetur tenetur delensiti?'
   ]);
         Listing::create([
+            'user_id' => $user->id,
             'title' => 'Laravel Developer', 
             'tags' => 'laravel, vue, javascript',
             'company' => 'Wayne Enterprises',
