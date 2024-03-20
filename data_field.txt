@@ -1,0 +1,13 @@
+$table->string('title');
+$table->string('tags');
+$table->string('company');
+$table->string('location');
+$table->string('email');
+$table->string('website');
+$table->string('description');
+
+DB::table('users')->insert([
+            'name' => Str::random(10),
+            'email' => Str::random(10).'@example.com',
+            'password' => Hash::make('password'),
+]);
